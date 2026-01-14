@@ -16,7 +16,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 config = context.config
 
 # Interpret the config file for Python logging.
-fileConfig(config.config_file_name)
+try:
+    if config.config_file_name is not None:
+        fileConfig(config.config_file_name)
+except Exception:
+    # ignore logging configuration errors in this environment
+    pass
 
 # Import metadata from the project
 from models.base import Base  # noqa: E402

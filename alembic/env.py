@@ -30,8 +30,13 @@ from models.base import Base  # noqa: E402
 # If using async DB URLs (sqlite+aiosqlite), Alembic requires a sync URL.
 def get_sync_url():
     url = os.getenv("DATABASE_URL", None) or config.get_main_option("sqlalchemy.url")
-    if url and url.startswith("sqlite+aiosqlite"):
-        return url.replace("+aiosqlite", "")
+    if not url:
+        return url
+    # Handle known async dialect suffixes used by SQLAlchemy async drivers
+    for async_suffix in ("+aiosqlite", "+asyncpg"):
+        if async_suffix in url:
+            return url.replace(async_suffix, "")
+    # Fallback: return the URL unchanged if no async suffix detected
     return url
 
 

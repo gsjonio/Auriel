@@ -26,6 +26,8 @@ jobs:
           poetry env use python
       - name: Install dependencies
         run: poetry install --no-root
+      - name: Apply Alembic migrations
+        run: poetry run alembic upgrade head
       - name: Run tests
         run: poetry run pytest -q
       - name: Lint (optional)

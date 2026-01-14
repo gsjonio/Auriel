@@ -84,6 +84,6 @@ async def delete_delivery(
     delivery = result.scalar_one_or_none()
     if not delivery:
         raise HTTPException(status_code=404, detail="Delivery not found")
-    await session.delete(delivery)
+    session.delete(delivery)
     await session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
